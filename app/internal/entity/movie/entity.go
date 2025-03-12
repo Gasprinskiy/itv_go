@@ -7,7 +7,7 @@ type Movie struct {
 	Title    string    `json:"title" db:"title" gorm:"size:255;not null"`
 	Director string    `json:"director" db:"director" gorm:"size:255;not null"`
 	Plot     string    `json:"plot" db:"plot" gorm:"size:255;not null"`
-	Year     time.Time `json:"year" db:"year" gorm:"type:timestamp;not null"`
+	Year     time.Time `json:"year" db:"year" gorm:"type:date;not null"`
 }
 
 type CreateMovieRecordParam struct {

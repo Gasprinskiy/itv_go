@@ -1,14 +1,15 @@
 package repository
 
 import (
-	"database/sql"
 	"itv_go/internal/entity/movie"
+
+	"gorm.io/gorm"
 )
 
 type MovieRepository interface {
-	CreateMovieRecord(tx *sql.Tx, param movie.CreateMovieRecordParam) (int, error)
-	GetMovieByID(tx *sql.Tx, id int) (movie.Movie, error)
-	UpdateMovie(tx *sql.Tx, param movie.Movie) (int, error)
-	DeleteMovie(tx *sql.Tx, id int) (int, error)
-	GetMovieList(tx *sql.Tx, id int) ([]movie.Movie, error)
+	CreateMovieRecord(tx **gorm.DB, param movie.CreateMovieRecordParam) (int, error)
+	GetMovieByID(tx **gorm.DB, id int) (movie.Movie, error)
+	UpdateMovie(tx **gorm.DB, param movie.Movie) (int, error)
+	DeleteMovie(tx **gorm.DB, id int) (int, error)
+	GetMovieList(tx **gorm.DB, id int) ([]movie.Movie, error)
 }
