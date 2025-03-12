@@ -2,9 +2,15 @@ package repository
 
 import (
 	"itv_go/internal/entity/movie"
+	appuser "itv_go/internal/entity/user"
 
 	"gorm.io/gorm"
 )
+
+type User interface {
+	CreateUser(tx *gorm.DB, param appuser.CreateUserParams) (int, error)
+	GetUserByLogin(tx *gorm.DB, login string) (appuser.User, error)
+}
 
 type Movie interface {
 	CreateMovieRecord(tx *gorm.DB, param movie.CreateMovieRecordParam) (int, error)
