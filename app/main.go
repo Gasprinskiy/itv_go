@@ -5,18 +5,14 @@ import (
 	"itv_go/database"
 
 	"go.uber.org/fx"
-	"go.uber.org/fx/fxevent"
 )
 
 func main() {
 	app := fx.New(
 		fx.Provide(
-			config.NewConfig,     // Конфиг
-			database.NewDatabase, // Теперь принимает *config.Config
+			config.NewConfig,
+			database.NewDatabase,
 		),
-		fx.WithLogger(func() fxevent.Logger {
-			return &fxevent.ConsoleLogger{}
-		}),
 	)
 
 	app.Run()

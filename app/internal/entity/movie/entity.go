@@ -8,6 +8,7 @@ type Movie struct {
 	Director string    `json:"director" db:"director" gorm:"size:255;not null"`
 	Plot     string    `json:"plot" db:"plot" gorm:"size:255;not null"`
 	Year     time.Time `json:"year" db:"year" gorm:"type:date;not null"`
+	Deleted  bool      `db:"deleted" gorm:"default:false;not null"`
 }
 
 type CreateMovieRecordParam struct {
@@ -15,4 +16,14 @@ type CreateMovieRecordParam struct {
 	Director string    `json:"director" db:"director"`
 	Plot     string    `json:"plot" db:"plot"`
 	Year     time.Time `json:"year" db:"year"`
+}
+
+func NewMovieFromCreateMovieRecordParam(param CreateMovieRecordParam) Movie {
+	return Movie{
+		ID:       -1,
+		Title:    param.Title,
+		Director: param.Director,
+		Plot:     param.Plot,
+		Year:     param.Year,
+	}
 }

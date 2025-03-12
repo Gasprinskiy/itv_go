@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"itv_go/config"
 	"itv_go/internal/entity/movie"
 	"log"
@@ -12,7 +11,6 @@ import (
 )
 
 func NewDatabase(conf *config.Config) *gorm.DB {
-	fmt.Println("FUCK: ", conf.DbUrl)
 	db, err := gorm.Open(postgres.Open(conf.DbUrl), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
