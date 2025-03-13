@@ -32,6 +32,16 @@ func NewUserExternal(
 	return &ext
 }
 
+// @Summary      User registration
+// @Description  Creates a new user with a login and password
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        user body appuser.CreateUserParams true "User credentials"
+// @Success      201  {object}  appuser.UserResponse
+// @Failure      400  {object}  global.ErrorResponse
+// @Failure      500  {object}  global.ErrorResponse
+// @Router       /register [post]
 func (e *UserExternal) Register(c *gin.Context) {
 	param := appuser.CreateUserParams{}
 	if err := c.BindJSON(&param); err != nil {

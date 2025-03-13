@@ -1,0 +1,52 @@
+definitions:
+  appuser.CreateUserParams:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  appuser.UserResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+  global.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user with a login and password
+      parameters:
+      - description: User credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/appuser.CreateUserParams'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/appuser.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/global.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/global.ErrorResponse'
+      summary: User registration
+      tags:
+      - auth
+swagger: "2.0"

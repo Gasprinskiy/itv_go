@@ -3,6 +3,7 @@ package database
 import (
 	"itv_go/config"
 	"itv_go/internal/entity/movie"
+	appuser "itv_go/internal/entity/user"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -19,7 +20,7 @@ func NewDatabase(conf *config.Config) *gorm.DB {
 		log.Panic("Could not connect to database: ", err)
 	}
 
-	err = db.AutoMigrate(&movie.Movie{})
+	err = db.AutoMigrate(&movie.Movie{}, &appuser.User{})
 	if err != nil {
 		log.Panic("Could not automigrate: ", err)
 	}

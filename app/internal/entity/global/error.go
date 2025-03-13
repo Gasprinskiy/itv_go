@@ -17,3 +17,7 @@ var StatusCodes = map[error]int{
 	ErrInternalError:          http.StatusInternalServerError,
 	ErrInvalidLoginOrPassword: http.StatusUnauthorized,
 }
+
+type ErrorResponse struct {
+	Message string `json:"message"`
+}
