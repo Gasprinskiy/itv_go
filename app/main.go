@@ -50,6 +50,7 @@ func main() {
 			middleware.NewAuthMiddleware,
 			usecase.NewJwtUsecase,
 			usecase.NewUserUsecase,
+			usecase.NewMovieUsecase,
 		),
 		fx.Invoke(
 			NewSwaggerHandler,

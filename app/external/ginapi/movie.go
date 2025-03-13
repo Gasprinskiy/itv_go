@@ -51,7 +51,8 @@ func NewMovieExternal(
 func (e *MovieExternal) CreateMovie(c *gin.Context) {
 	param := movie.CreateMovieRecordParam{}
 	if err := c.BindJSON(&param); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": global.ErrInvalidParam.Error()})
+		// c.JSON(http.StatusBadRequest, gin.H{"message": global.ErrInvalidParam.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
