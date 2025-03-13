@@ -14,9 +14,12 @@ func NewUserRepository() repository.User {
 }
 
 func (r *userRepository) CreateUser(tx *gorm.DB, param appuser.CreateUserParams) (int, error) {
-	newRecord := appuser.NewUserFromCreateUserParams(param)
+	newRecord := appuser.User{}
 
-	result := tx.Create(&newRecord)
+	result := tx.Model(&appuser.User{}).Create(map[string]interface{}{
+		"login":    param.Login,
+		"password": param.Password,
+	}).Last(&newRecord)
 
 	return newRecord.ID, result.Error
 }
@@ -24,7 +27,7 @@ func (r *userRepository) CreateUser(tx *gorm.DB, param appuser.CreateUserParams)
 func (r *userRepository) GetUserByLogin(tx *gorm.DB, login string) (appuser.User, error) {
 	record := appuser.User{}
 
-	result := tx.First(&record, "login = ?", login)
+	result := tx.Find(&record, "login = ?", login)
 
 	return record, result.Error
 }

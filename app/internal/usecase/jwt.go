@@ -28,8 +28,9 @@ func (u *JwtUsecase) GenerateToken(userID int) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	secretKey := []byte(u.Config.JwtSecret)
 
-	result, err := token.SignedString(u.Config.JwtSecret)
+	result, err := token.SignedString(secretKey)
 	if err != nil {
 		err = global.ErrInternalError
 	}
@@ -39,7 +40,7 @@ func (u *JwtUsecase) GenerateToken(userID int) (string, error) {
 
 func (u *JwtUsecase) ParseToken(tokenString string) (*appjwt.Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &appjwt.Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return u.Config.JwtSecret, nil
+		return []byte(u.Config.JwtSecret), nil
 	})
 
 	if err != nil {

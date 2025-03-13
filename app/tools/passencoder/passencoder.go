@@ -7,7 +7,7 @@ import (
 )
 
 func CreateHashPassword(password string) (string, error) {
-	salt, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost) // Используем встроенную соль
+	salt, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", fmt.Errorf("error hashing password: %w", err)
 	}

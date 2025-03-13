@@ -7,8 +7,11 @@ import (
 	"itv_go/database"
 	_ "itv_go/docs"
 	external "itv_go/external/ginapi"
+	"itv_go/external/middleware"
 	"itv_go/internal/repository/postgress"
 	"itv_go/internal/usecase"
+	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -20,18 +23,17 @@ func NewSwaggerHandler(router *gin.Engine) {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
-func RunServer(lc fx.Lifecycle, router *gin.Engine) {
+func RunServer(lc fx.Lifecycle, router *gin.Engine, cfg *config.Config) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
+			port := fmt.Sprintf(":%s", cfg.Port)
+
 			go func() {
-				if err := router.Run(":8080"); err != nil {
-					panic(err) // Если сервер упадет — сразу краш
+				if err := router.Run(port); err != nil && err != http.ErrServerClosed {
+					log.Fatalf("Failed to start server: %v", err)
 				}
 			}()
-			return nil
-		},
-		OnStop: func(ctx context.Context) error {
-			fmt.Println("Server is shutting down...")
+
 			return nil
 		},
 	})
@@ -45,6 +47,7 @@ func main() {
 			database.NewDatabase,
 			postgress.NewUserRepository,
 			postgress.NewMovieRepository,
+			middleware.NewAuthMiddleware,
 			usecase.NewJwtUsecase,
 			usecase.NewUserUsecase,
 		),
@@ -52,6 +55,7 @@ func main() {
 			NewSwaggerHandler,
 			RunServer,
 			external.NewUserExternal,
+			external.NewMovieExternal,
 		),
 	)
 

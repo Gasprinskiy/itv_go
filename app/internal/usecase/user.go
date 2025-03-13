@@ -28,24 +28,40 @@ func NewUserUsecase(
 }
 
 func (u *UserUsecase) Register(param appuser.CreateUserParams) (int, error) {
-	encodePass, err := passencoder.CreateHashPassword(param.Password)
-	if err != nil {
-		return 0, global.ErrInternalError
-	}
-
-	param.Password = encodePass
-
 	tx := u.db.Session(&gorm.Session{
 		SkipDefaultTransaction: true,
 	})
+	defer tx.Commit()
 
-	id, err := u.userRepo.CreateUser(tx, param)
-	if err != nil {
+	tx.Begin()
+
+	_, err := u.userRepo.GetUserByLogin(tx, param.Login)
+
+	switch err {
+	case nil:
 		tx.Rollback()
-		err = global.ErrInternalError
-	}
+		return 0, global.ErrUserAllreadyExists
 
-	return id, err
+	case gorm.ErrRecordNotFound:
+		encodePass, err := passencoder.CreateHashPassword(param.Password)
+		if err != nil {
+			return 0, global.ErrInternalError
+		}
+
+		param.Password = encodePass
+
+		id, err := u.userRepo.CreateUser(tx, param)
+		if err != nil {
+			tx.Rollback()
+			err = global.ErrInternalError
+		}
+
+		return id, err
+
+	default:
+		tx.Rollback()
+		return 0, global.ErrInternalError
+	}
 }
 
 func (u *UserUsecase) Auth(param appuser.CreateUserParams) (int, error) {
