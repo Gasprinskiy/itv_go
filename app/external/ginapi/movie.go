@@ -29,7 +29,6 @@ func NewMovieExternal(
 		authMiddleware,
 	}
 
-	// Роут с проверкой авторизации
 	ext.gin.POST("/movie", ext.authMiddleware.CheckAccesToken(), ext.CreateMovie)
 
 	return &ext

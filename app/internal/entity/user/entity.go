@@ -7,8 +7,8 @@ type User struct {
 }
 
 type CreateUserParams struct {
-	Login    string `json:"login" db:"login" gorm:"size:255;not null"`
-	Password string `json:"password" db:"password" gorm:"size:255;not null"`
+	Login    string `json:"login" db:"login" validate:"required,min=4,max=32"`
+	Password string `json:"password" db:"password" validate:"required,min=5,max=32"`
 }
 
 type UserResponse struct {

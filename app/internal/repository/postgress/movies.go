@@ -14,9 +14,14 @@ func NewMovieRepository() repository.Movie {
 }
 
 func (r *movieRepository) CreateMovieRecord(tx *gorm.DB, param movie.CreateMovieRecordParam) (int, error) {
-	newRecord := movie.NewMovieFromCreateMovieRecordParam(param)
+	newRecord := movie.Movie{}
 
-	result := tx.Model(&movie.Movie{}).Create(&param)
+	result := tx.Model(&movie.Movie{}).Create(map[string]interface{}{
+		"title":    param.Title,
+		"director": param.Director,
+		"plot":     param.Plot,
+		"year":     param.Year,
+	})
 	tx.Last(&newRecord)
 
 	return newRecord.ID, result.Error

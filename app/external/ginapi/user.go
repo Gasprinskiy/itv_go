@@ -5,6 +5,7 @@ import (
 	"itv_go/internal/entity/global"
 	appuser "itv_go/internal/entity/user"
 	"itv_go/internal/usecase"
+	"itv_go/tools/validator"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -55,6 +56,11 @@ func (e *UserExternal) Register(c *gin.Context) {
 		return
 	}
 
+	if err := validator.ValidateStruct(param); err != nil {
+		c.JSON(global.ErrStatusCodes[global.ErrInvalidParam], gin.H{"message": err.Error()})
+		return
+	}
+
 	id, err := e.userUsercase.Register(param)
 	if err != nil {
 		c.JSON(global.ErrStatusCodes[err], gin.H{"message": err.Error()})
@@ -80,6 +86,11 @@ func (e *UserExternal) Auth(c *gin.Context) {
 	param := appuser.CreateUserParams{}
 	if err := c.BindJSON(&param); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": global.ErrInvalidParam.Error()})
+		return
+	}
+
+	if err := validator.ValidateStruct(param); err != nil {
+		c.JSON(global.ErrStatusCodes[global.ErrInvalidParam], gin.H{"message": err.Error()})
 		return
 	}
 
