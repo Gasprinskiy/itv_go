@@ -51,8 +51,9 @@ func NewUserExternal(
 // @Router       /user/register [post]
 func (e *UserExternal) Register(c *gin.Context) {
 	param := appuser.CreateUserParams{}
+
 	if err := c.BindJSON(&param); err != nil {
-		c.JSON(global.ErrStatusCodes[global.ErrInvalidParam], gin.H{"message": global.ErrInvalidParam.Error()})
+		c.JSON(global.ErrStatusCodes[global.ErrInvalidParam], gin.H{"message": err.Error()})
 		return
 	}
 
@@ -84,8 +85,9 @@ func (e *UserExternal) Register(c *gin.Context) {
 // @Router       /user/auth [post]
 func (e *UserExternal) Auth(c *gin.Context) {
 	param := appuser.CreateUserParams{}
+
 	if err := c.BindJSON(&param); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": global.ErrInvalidParam.Error()})
+		c.JSON(global.ErrStatusCodes[global.ErrInvalidParam], gin.H{"message": err.Error()})
 		return
 	}
 

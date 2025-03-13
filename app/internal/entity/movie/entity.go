@@ -10,12 +10,12 @@ type Movie struct {
 	Director string          `json:"director" db:"director" gorm:"size:255;not null"`
 	Plot     string          `json:"plot" db:"plot" gorm:"size:255;not null"`
 	Year     customdate.Date `json:"year" db:"year" gorm:"type:date;not null"`
-	Deleted  bool            `db:"deleted" gorm:"default:false;not null"`
+	Deleted  bool            `json:"-" db:"deleted" gorm:"default:false;not null"`
 }
 
 type CreateMovieRecordParam struct {
 	Title    string          `json:"title" db:"title" validate:"required,max=50"`
 	Director string          `json:"director" db:"director" validate:"required,max=25"`
-	Plot     string          `json:"plot" db:"plot" validate:"required,min=25,max=250"`
+	Plot     string          `json:"plot" db:"plot" validate:"required,min=5,max=250"`
 	Year     customdate.Date `json:"year" db:"year" validate:"required" format:"date"`
 }

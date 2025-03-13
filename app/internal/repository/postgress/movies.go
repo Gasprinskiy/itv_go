@@ -30,7 +30,7 @@ func (r *movieRepository) CreateMovieRecord(tx *gorm.DB, param movie.CreateMovie
 func (r *movieRepository) GetMovieByID(tx *gorm.DB, id int) (movie.Movie, error) {
 	record := movie.Movie{}
 
-	result := tx.First(&record, id)
+	result := tx.Model(&movie.Movie{}).Where("id = ? AND deleted = ?", id, false).First(&record)
 
 	return record, result.Error
 }
@@ -46,10 +46,11 @@ func (r *movieRepository) DeleteMovie(tx *gorm.DB, id int) (int, error) {
 
 	return id, result.Error
 }
+
 func (r *movieRepository) GetMovieList(tx *gorm.DB) ([]movie.Movie, error) {
 	listOfRecords := []movie.Movie{}
 
-	result := tx.Find(&listOfRecords)
+	result := tx.Model(&movie.Movie{}).Where("deleted = ?", false).Find(&listOfRecords)
 
 	return listOfRecords, result.Error
 }
