@@ -11,10 +11,6 @@ type CreateUserParams struct {
 	Password string `json:"password" db:"password" validate:"required,min=5,max=32"`
 }
 
-type UserResponse struct {
-	ID int `json:"id"`
-}
-
 func NewUserFromCreateUserParams(param CreateUserParams) User {
 	return User{
 		ID:       -1,

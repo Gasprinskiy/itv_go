@@ -44,7 +44,7 @@ func NewUserExternal(
 // @Accept       json
 // @Produce      json
 // @Param        user body appuser.CreateUserParams true "User credentials"
-// @Success      201  {object}  appuser.UserResponse "User ID"
+// @Success      201  {object}  global.CreatedOrUpdatedResponse "User ID"
 // @Failure      400  {object}  global.MessageResponse "Invalid request parameters"
 // @Failure      409  {object}  global.MessageResponse "User allready exists"
 // @Failure      500  {object}  global.MessageResponse "Internal server error"
@@ -76,7 +76,7 @@ func (e *UserExternal) Register(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        credentials body appuser.CreateUserParams true "User login and password"
-// @Success      200  {object}  appuser.UserResponse "User ID"
+// @Success      200  {object}  global.CreatedOrUpdatedResponse "User ID"
 // @Failure      400  {object}  global.MessageResponse "Invalid request parameters"
 // @Failure      401  {object}  global.MessageResponse "Unauthorized"
 // @Failure      404  {object}  global.MessageResponse "Invalid login or password"

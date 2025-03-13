@@ -12,10 +12,10 @@ type Movie struct {
 }
 
 type CreateMovieRecordParam struct {
-	Title    string    `json:"title" db:"title"`
-	Director string    `json:"director" db:"director"`
-	Plot     string    `json:"plot" db:"plot"`
-	Year     time.Time `json:"year" db:"year"`
+	Title    string    `json:"title" db:"title" validate:"required,max=50"`
+	Director string    `json:"director" db:"director" validate:"required,max=25"`
+	Plot     string    `json:"plot" db:"plot" validate:"required,min=25,max=250"`
+	Year     time.Time `json:"year" db:"year" validate:"required"`
 }
 
 func NewMovieFromCreateMovieRecordParam(param CreateMovieRecordParam) Movie {
