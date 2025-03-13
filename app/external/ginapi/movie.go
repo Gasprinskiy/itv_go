@@ -33,29 +33,29 @@ func NewMovieExternal(
 		authMiddleware,
 	}
 
-	movieGroup := ext.gin.Group("/movies")
+	group := ext.gin.Group("/movies")
 	{
-		movieGroup.POST(
+		group.POST(
 			"",
 			ext.authMiddleware.CheckAccesToken(),
 			ext.CreateMovie,
 		)
-		movieGroup.GET(
+		group.GET(
 			"",
 			ext.authMiddleware.CheckAccesToken(),
 			ext.GetMovieList,
 		)
-		movieGroup.GET(
+		group.GET(
 			"/:id",
 			ext.authMiddleware.CheckAccesToken(),
 			ext.GetMovieByID,
 		)
-		movieGroup.PUT(
+		group.PUT(
 			"/:id",
 			ext.authMiddleware.CheckAccesToken(),
 			ext.UpdateMovie,
 		)
-		movieGroup.DELETE(
+		group.DELETE(
 			"/:id",
 			ext.authMiddleware.CheckAccesToken(),
 			ext.DeleteMovie,

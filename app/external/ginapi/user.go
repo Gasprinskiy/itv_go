@@ -31,9 +31,12 @@ func NewUserExternal(
 		cnfg,
 	}
 
-	ext.gin.POST("/user/register", ext.Register)
-	ext.gin.POST("/user/auth", ext.Auth)
-	ext.gin.POST("/user/logout", ext.Logout)
+	group := ext.gin.Group("/user")
+	{
+		group.POST("/register", ext.Register)
+		group.POST("/auth", ext.Auth)
+		group.POST("/logout", ext.Logout)
+	}
 
 	return &ext
 }
