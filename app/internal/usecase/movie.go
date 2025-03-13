@@ -1,9 +1,10 @@
 package usecase
 
 import (
-	"itv_go/internal/entity/global"
+	"fmt"
 	"itv_go/internal/entity/movie"
 	"itv_go/internal/repository"
+	transactiongeneric "itv_go/tools/transaction-generic"
 
 	"gorm.io/gorm"
 )
@@ -21,90 +22,47 @@ func NewMovieUsecase(
 }
 
 func (u *MovieUsecase) CreateNewMovieRecord(param movie.CreateMovieRecordParam) (int, error) {
-	tx := u.db.Session(&gorm.Session{
-		SkipDefaultTransaction: true,
-	})
-	defer tx.Commit()
-
-	tx.Begin()
-
-	id, err := u.movieRepo.CreateMovieRecord(tx, param)
-	if err != nil {
-		err = global.ErrInternalError
-		tx.Rollback()
-	}
-
-	return id, err
+	return transactiongeneric.HandleMethodWithTransaction(
+		u.db,
+		func(tx *gorm.DB) (int, error) {
+			return u.movieRepo.CreateMovieRecord(tx, param)
+		},
+	)
 }
 
 func (u *MovieUsecase) GetMovieByID(id int) (movie.Movie, error) {
-	tx := u.db.Session(&gorm.Session{
-		SkipDefaultTransaction: true,
-	})
-	defer tx.Commit()
-
-	tx.Begin()
-
-	movie, err := u.movieRepo.GetMovieByID(tx, id)
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			err = global.ErrNoData
-		} else {
-			err = global.ErrInternalError
-		}
-		tx.Rollback()
-	}
-
-	return movie, err
+	fmt.Println("FUCKING MOVIE")
+	return transactiongeneric.HandleMethodWithTransaction(
+		u.db,
+		func(tx *gorm.DB) (movie.Movie, error) {
+			return u.movieRepo.GetMovieByID(tx, id)
+		},
+	)
 }
 
 func (u *MovieUsecase) UpdateMovie(param movie.Movie) (int, error) {
-	tx := u.db.Session(&gorm.Session{
-		SkipDefaultTransaction: true,
-	})
-	defer tx.Commit()
-
-	tx.Begin()
-
-	id, err := u.movieRepo.UpdateMovie(tx, param)
-	if err != nil {
-		err = global.ErrInternalError
-		tx.Rollback()
-	}
-
-	return id, err
+	return transactiongeneric.HandleMethodWithTransaction(
+		u.db,
+		func(tx *gorm.DB) (int, error) {
+			return u.movieRepo.UpdateMovie(tx, param)
+		},
+	)
 }
 
 func (u *MovieUsecase) DeleteMovie(id int) (int, error) {
-	tx := u.db.Session(&gorm.Session{
-		SkipDefaultTransaction: true,
-	})
-	defer tx.Commit()
-
-	tx.Begin()
-
-	id, err := u.movieRepo.DeleteMovie(tx, id)
-	if err != nil {
-		err = global.ErrInternalError
-		tx.Rollback()
-	}
-
-	return id, err
+	return transactiongeneric.HandleMethodWithTransaction(
+		u.db,
+		func(tx *gorm.DB) (int, error) {
+			return u.movieRepo.DeleteMovie(tx, id)
+		},
+	)
 }
 
 func (u *MovieUsecase) GetMovieList() ([]movie.Movie, error) {
-	tx := u.db.Session(&gorm.Session{
-		SkipDefaultTransaction: true,
-	})
-	defer tx.Commit()
-
-	tx.Begin()
-
-	list, err := u.movieRepo.GetMovieList(tx)
-	if err != nil {
-		err = global.ErrInternalError
-		tx.Rollback()
-	}
-
-	return list, err
+	return transactiongeneric.HandleMethodWithTransaction(
+		u.db,
+		func(tx *gorm.DB) ([]movie.Movie, error) {
+			return u.movieRepo.GetMovieList(tx)
+		},
+	)
 }

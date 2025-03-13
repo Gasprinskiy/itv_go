@@ -5,6 +5,7 @@ import (
 	appuser "itv_go/internal/entity/user"
 	"itv_go/internal/repository"
 	"itv_go/tools/passencoder"
+	transactiongeneric "itv_go/tools/transaction-generic"
 
 	"gorm.io/gorm"
 )
@@ -65,17 +66,15 @@ func (u *UserUsecase) Register(param appuser.CreateUserParams) (int, error) {
 }
 
 func (u *UserUsecase) Auth(param appuser.CreateUserParams) (int, error) {
-	tx := u.db.Session(&gorm.Session{
-		SkipDefaultTransaction: true,
-	})
-
-	user, err := u.userRepo.GetUserByLogin(tx, param.Login)
+	user, err := transactiongeneric.HandleMethodWithTransaction(
+		u.db,
+		func(tx *gorm.DB) (appuser.User, error) {
+			return u.userRepo.GetUserByLogin(tx, param.Login)
+		},
+	)
 
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return 0, global.ErrInvalidLoginOrPassword
-		}
-		return 0, global.ErrInternalError
+		return 0, err
 	}
 
 	isPassCorrect := passencoder.CheckHashPassword(user.Password, param.Password)
