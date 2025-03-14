@@ -31,7 +31,6 @@ func (u *MovieUsecase) CreateNewMovieRecord(param movie.CreateMovieRecordParam) 
 }
 
 func (u *MovieUsecase) GetMovieByID(id int) (movie.Movie, error) {
-	fmt.Println("FUCKING MOVIE")
 	return transactiongeneric.HandleMethodWithTransaction(
 		u.db,
 		func(tx *gorm.DB) (movie.Movie, error) {
