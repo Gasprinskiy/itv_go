@@ -56,7 +56,7 @@ The API provides the following main endpoints:
 
 ### Movie Management
 - `POST /movie` – Create a new movie (authorized users only)
-- `GET /movie` – Get a list of all movies
+- `GET /movie` – Get a list of all movies (authorized users only)
 - `PUT /movie/:id` – Update movie details (authorized users only)
 - `DELETE /movie/:id` – Delete a movie (authorized users only)
 
